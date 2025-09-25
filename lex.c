@@ -29,9 +29,8 @@ Instructor : Dr . Jie Lin
 Due Date : Friday , October 3 , 2025 at 11:59 PM ET
 */
 #include <stdio.h>
-
-int MAXID = 11;
-int MAXNUM = 5;
+#define MAXNUM 5
+#define MAXID 11
 
 typedef enum {
 skipsym = 1,        // Skip / ignore token
@@ -79,22 +78,32 @@ typedef struct {
 // PRINT FUNCTIONS
 
 void printSourceProgram(){
-
+    printf("\nSource Program:\n");
 }
 
 void printLexemeTable(){
-    
+    printf("\nLexeme Table:\n\n");
+    printf("lexeme\ttoken type");
 }
 
 void printTokenList(){
+    printf("\n\nToken List:\n\n");
     
 }
 
-int main(int argc){
+int main(int argc, char *argv[]){
 
-    if(argc != 1){
+    char line[100];
+
+    if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
+        return 1;
     }
-
+    /*while(fgets(line, 100, stdin) != EOF) {
+        printf(line); 
+    }*/
+    printSourceProgram();
+    printLexemeTable();
+    printTokenList();
 }
 
