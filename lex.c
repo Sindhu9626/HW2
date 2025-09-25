@@ -29,6 +29,8 @@ Instructor : Dr . Jie Lin
 Due Date : Friday , October 3 , 2025 at 11:59 PM ET
 */
 #include <stdio.h>
+#include <stdlib.h>
+
 #define MAXNUM 5
 #define MAXID 11
 
@@ -93,15 +95,31 @@ void printTokenList(){
 
 int main(int argc, char *argv[]){
 
-    char line[100];
-
     if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
         return 1;
+    } 
+
+    char **lines = malloc(sizeof(char*)*100);
+    int index = 0;
+     for(int i = 0; i < 100; i++){
+        lines[i] = (char*)malloc(50*sizeof(char));
     }
-    /*while(fgets(line, 100, stdin) != EOF) {
-        printf(line); 
-    }*/
+
+    FILE *inputFile = fopen("input.txt", "r");
+    
+
+    if (inputFile == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    }
+
+    while(fscanf(inputFile,"%s", lines[index]) == 1){
+        printf("\n%s", lines[index]);
+        index++;
+    }
+
+
     printSourceProgram();
     printLexemeTable();
     printTokenList();
