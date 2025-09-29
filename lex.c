@@ -93,13 +93,18 @@ void printLexemeTable(Token * allTokens, int size){
     printf("lexeme\ttoken type");
     for (int i = 0; i < size; i++) {
         printf("\n%s\t%d", allTokens[0].lexeme, allTokens[i].tokenType);
-       // printf("%s\t%d", allTokens[0].lexeme, allTokens[0].token);
     }
 
 }
 
-void printTokenList(){
-    printf("\n\nToken List:\n\n");
+void printTokenList(Token * allTokens, int size){
+    printf("\n\nToken List:\n\n\n");
+    for(int i = 0; i < size; i++) {
+        printf("%d ", allTokens[i].tokenType);
+        if(allTokens[i].tokenType == 2) {
+            printf("%s ", allTokens[i].lexeme);
+        }
+    }
     
 }
 
@@ -148,6 +153,6 @@ int main(int argc, char *argv[]){
         }
     }
     printLexemeTable(allTokens, tokenIndex);
-    printTokenList();   
+    printTokenList(allTokens, tokenIndex);   
 }
 
