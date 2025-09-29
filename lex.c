@@ -79,8 +79,11 @@ typedef struct {
 
 // PRINT FUNCTIONS
 
-void printSourceProgram(){
+void printSourceProgram(char **input, int size){
     printf("\nSource Program:\n");
+    for(int i = 0; i < size; i++) {
+        printf("%s", input[i]);
+    }
 }
 
 void printLexemeTable(){
@@ -100,27 +103,26 @@ int main(int argc, char *argv[]){
         return 1;
     } 
 
+    
+    FILE *inputFile = fopen("input.txt", "r");
+    
     char **lines = malloc(sizeof(char*)*100);
     int index = 0;
      for(int i = 0; i < 100; i++){
         lines[i] = (char*)malloc(50*sizeof(char));
-    }
-
-    FILE *inputFile = fopen("input.txt", "r");
-    
+     }
 
     if (inputFile == NULL) {
         printf("Error opening file.\n");
         return 1;
     }
 
-    while(fscanf(inputFile,"%s", lines[index]) == 1){
-        printf("\n%s", lines[index]);
+    while(fscanf(inputFile,"%100[^\n]", lines[index]) == 1){
         index++;
     }
 
 
-    printSourceProgram();
+    printSourceProgram(lines, index);
     printLexemeTable();
     printTokenList();
 }
