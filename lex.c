@@ -72,9 +72,11 @@ evensym = 34,       // even
 } TokenType;
 
 typedef struct {
+    TokenType tokenType;
+    char * lexeme;
+    int token;
     
-    
-}Token;
+} Token;
 
 
 // PRINT FUNCTIONS
@@ -82,7 +84,7 @@ typedef struct {
 void printSourceProgram(char **input, int size){
     printf("\nSource Program:\n\n");
     for(int i = 0; i < size; i++) {
-        printf("%s", input[i]);
+        printf("%s\n", input[i]);
     }
 }
 
@@ -117,8 +119,9 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    while(fscanf(inputFile,"%100[^\n]", lines[index]) == 1){
+    while(fscanf(inputFile,"%[^\n]", lines[index]) == 1){
         index++;
+        getc(inputFile);
     }
 
 
