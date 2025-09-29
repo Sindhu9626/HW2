@@ -80,14 +80,14 @@ typedef struct {
 // PRINT FUNCTIONS
 
 void printSourceProgram(char **input, int size){
-    printf("\nSource Program:\n");
+    printf("\nSource Program:\n\n");
     for(int i = 0; i < size; i++) {
         printf("%s", input[i]);
     }
 }
 
 void printLexemeTable(){
-    printf("\nLexeme Table:\n\n");
+    printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
 }
 
