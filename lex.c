@@ -30,6 +30,7 @@ Due Date : Friday , October 3 , 2025 at 11:59 PM ET
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAXNUM 5
 #define MAXID 11
@@ -88,9 +89,14 @@ void printSourceProgram(char **input, int size){
     }
 }
 
-void printLexemeTable(){
+void printLexemeTable(Token * allTokens, int size){
     printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
+    for (int i = 0; i < size; i++) {
+        printf("\n%s\t%d", allTokens[0].lexeme, allTokens[i].token);
+       // printf("%s\t%d", allTokens[0].lexeme, allTokens[0].token);
+    }
+
 }
 
 void printTokenList(){
@@ -105,6 +111,8 @@ int main(int argc, char *argv[]){
         return 1;
     } 
 
+    // Adjust as needed
+    Token * allTokens = malloc(100*sizeof(Token));
     
     FILE *inputFile = fopen("input.txt", "r");
     
@@ -124,9 +132,24 @@ int main(int argc, char *argv[]){
         getc(inputFile);
     }
 
+    
 
     printSourceProgram(lines, index);
-    printLexemeTable();
-    printTokenList();
+
+    int tokenIndex = 0;
+    
+    for(int i=0; i < index; i++) { 
+        if(strstr(lines[i], "begin") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = beginsym;
+            allTokens[tokenIndex].token = 21;
+            
+            allTokens[tokenIndex].lexeme = "begin";
+            
+            tokenIndex++;
+        }
+    }
+    printLexemeTable(allTokens, tokenIndex);
+    printTokenList();   
 }
 
