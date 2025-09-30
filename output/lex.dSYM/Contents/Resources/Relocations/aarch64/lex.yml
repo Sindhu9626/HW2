@@ -1,0 +1,10 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/mikaylaphilpot/Desktop/coding/cop3402/HW2/output/lex'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _printSourceProgram, symObjAddr: 0x0, symBinAddr: 0x1000025C0, symSize: 0x80 }
+  - { offsetInCU: 0x123, offset: 0x123, size: 0x8, addend: 0x0, symName: _printSourceProgram, symObjAddr: 0x0, symBinAddr: 0x1000025C0, symSize: 0x80 }
+  - { offsetInCU: 0x171, offset: 0x171, size: 0x8, addend: 0x0, symName: _printLexemeTable, symObjAddr: 0x80, symBinAddr: 0x100002640, symSize: 0xB0 }
+  - { offsetInCU: 0x1BF, offset: 0x1BF, size: 0x8, addend: 0x0, symName: _printTokenList, symObjAddr: 0x130, symBinAddr: 0x1000026F0, symSize: 0xE4 }
+  - { offsetInCU: 0x20D, offset: 0x20D, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x214, symBinAddr: 0x1000027D4, symSize: 0x166C }
+...
