@@ -92,7 +92,7 @@ void printLexemeTable(Token * allTokens, int size){
     printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
     for (int i = 0; i < size; i++) {
-        printf("\n%s\t%d", allTokens[0].lexeme, allTokens[i].tokenType);
+        printf("\n%s\t%d", allTokens[i].lexeme, allTokens[i].tokenType);
     }
 
 }
