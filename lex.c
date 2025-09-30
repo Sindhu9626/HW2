@@ -110,25 +110,23 @@ void printTokenList(Token * allTokens, int size){
 
 int main(int argc, char *argv[]){
 
-    if(argc != 2){
+    if(argc != 1){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
-
-    // Adjust as needed
-    Token * allTokens = malloc(100*sizeof(Token));
     
     FILE *inputFile = fopen("input.txt", "r");
-    
-    char **lines = malloc(sizeof(char*)*100);
-    int index = 0;
-     for(int i = 0; i < 100; i++){
-        lines[i] = (char*)malloc(50*sizeof(char));
-     }
 
     if (inputFile == NULL) {
         printf("Error opening file.\n");
         return 1;
+    }
+    
+    char **lines = malloc(sizeof(char*)*100);
+    int index = 0;
+
+    for(int i = 0; i < 100; i++){
+        lines[i] = (char*)malloc(50*sizeof(char));
     }
 
     while(fscanf(inputFile,"%[^\n]", lines[index]) == 1){
@@ -140,6 +138,8 @@ int main(int argc, char *argv[]){
 
     printSourceProgram(lines, index);
 
+    // Adjust as needed
+    Token * allTokens = malloc(100*sizeof(Token));
     int tokenIndex = 0;
     char *resultPtr;
     
@@ -468,5 +468,5 @@ int main(int argc, char *argv[]){
     }
     printLexemeTable(allTokens, tokenIndex);
     printTokenList(allTokens, tokenIndex);   
+      
 }
-
