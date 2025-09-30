@@ -430,4 +430,5 @@ int main(int argc, char *argv[]){
     }
     printLexemeTable(allTokens, tokenIndex);
     printTokenList(allTokens, tokenIndex);   
+    printTokenList(allTokens, tokenIndex);   
 }
