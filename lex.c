@@ -92,20 +92,25 @@ void printLexemeTable(Token * allTokens, int size){
     printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
     for (int i = 0; i < size; i++) {
-        printf("\n%s\t%d", allTokens[0].lexeme, allTokens[i].tokenType);
-       // printf("%s\t%d", allTokens[0].lexeme, allTokens[0].token);
+        printf("\n%s\t%d", allTokens[i].lexeme, allTokens[i].tokenType);
     }
 
 }
 
-void printTokenList(){
-    printf("\n\nToken List:\n\n");
+void printTokenList(Token * allTokens, int size){
+    printf("\n\nToken List:\n\n\n");
+    for(int i = 0; i < size; i++) {
+        printf("%d ", allTokens[i].tokenType);
+        if(allTokens[i].tokenType == 2) {
+            printf("%s ", allTokens[i].lexeme);
+        }
+    }
     
 }
 
 int main(int argc, char *argv[]){
 
-    if(argc != 2){
+    if(argc != 1){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
@@ -137,17 +142,292 @@ int main(int argc, char *argv[]){
 
     int tokenIndex = 0;
     
-    for(int i=0; i < index; i++) { 
-        if(strstr(lines[i], "begin") != NULL) {
+    for(int i = 0; i < index; i++) { 
+        
+        if(strstr(lines[i], "+") != NULL) {
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
-            allTokens[tokenIndex].tokenType = beginsym;
+            allTokens[tokenIndex].tokenType = plussym;
             
-            allTokens[tokenIndex].lexeme = "begin";
+            allTokens[tokenIndex].lexeme = "+";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "-") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = minussym;
+            
+            allTokens[tokenIndex].lexeme = "-";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "*") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = multsym;
+            
+            allTokens[tokenIndex].lexeme = "*";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "/") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = slashsym;
+            
+            allTokens[tokenIndex].lexeme = "/";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "=") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = eqsym;
+            
+            allTokens[tokenIndex].lexeme = "=";
+            
+            tokenIndex++;
+        }
+        else if(strstr(lines[i], "<>") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = neqsym;
+            
+            allTokens[tokenIndex].lexeme = "<>";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "<") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = lessym;
+            
+            allTokens[tokenIndex].lexeme = "<";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "<=") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = leqsym;
+            
+            allTokens[tokenIndex].lexeme = "<=";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], ">") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = gtrsym;
+            
+            allTokens[tokenIndex].lexeme = ">";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], ">=") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = geqsym;
+            
+            allTokens[tokenIndex].lexeme = ">=";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "(") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = lparentsym;
+            
+            allTokens[tokenIndex].lexeme = "(";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], ")") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = rparentsym;
+            
+            allTokens[tokenIndex].lexeme = ")";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], ",") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = commasym;
+            
+            allTokens[tokenIndex].lexeme = ",";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], ";") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = semicolonsym;
+            
+            allTokens[tokenIndex].lexeme = ";";
+            
+            tokenIndex++;
+        }
+        if(strstr(lines[i], "*") != NULL) {
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = periodsym;
+            
+            allTokens[tokenIndex].lexeme = ".";
+            
+            tokenIndex++;
+        }
+
+        //becomes (:=)
+        if(strstr(lines[i], ":=") != NULL ) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = becomessym;
+            
+            allTokens[i].lexeme = ":=";
+            
+            tokenIndex++;
+        }
+        
+
+        //begin
+        if(strstr(lines[i], "begin") != NULL) {
+
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].lexeme = "begin";
+
+            allTokens[i].tokenType = beginsym;
+            
+            tokenIndex++;
+        }
+
+        
+        //end
+        if(strstr(lines[i], "end") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = endsym;
+            
+            allTokens[i].lexeme = "end";
+            
+            tokenIndex++;
+        }
+
+        //if
+        if(strstr(lines[i], "if") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = ifsym;
+            
+            allTokens[i].lexeme = "if";
+            
+            tokenIndex++;
+        }
+
+        //fi
+        if(strstr(lines[i], "fi") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = fisym;
+            
+            allTokens[i].lexeme = "fi";
+            
+            tokenIndex++;
+        }
+
+        //then
+        if(strstr(lines[i], "then") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = thensym;
+            
+            allTokens[i].lexeme = "then";
+            
+            tokenIndex++;
+        }
+
+        //while
+        if(strstr(lines[i], "while") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = whilesym;
+            
+            allTokens[i].lexeme = "while";
+            
+            tokenIndex++;
+        }
+
+        //do
+        if(strstr(lines[i], "do") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = dosym;
+            
+            allTokens[i].lexeme = "do";
+            
+            tokenIndex++;
+        }
+
+        //call
+        if(strstr(lines[i], "call") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = callsym;
+            
+            allTokens[i].lexeme = "call";
+            
+            tokenIndex++;
+        }
+
+        //const
+        if(strstr(lines[i], "const") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = constsym;
+            
+            allTokens[i].lexeme = "const";
+            
+            tokenIndex++;
+        }
+
+        //var
+        if(strstr(lines[i], "var") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = varsym;
+            
+            allTokens[i].lexeme = "var";
+            
+            tokenIndex++;
+        }
+
+        //procedure
+        if(strstr(lines[i], "procedure") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = procsym;
+            
+            allTokens[i].lexeme = "procedure";
+            
+            tokenIndex++;
+        }
+
+        //write
+        if(strstr(lines[i], "write") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = writesym;
+            
+            allTokens[i].lexeme = "write";
+            
+            tokenIndex++;
+        }
+
+        //read
+        if(strstr(lines[i], "read") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = readsym;
+            
+            allTokens[i].lexeme = "read";
+            
+            tokenIndex++;
+        }
+
+        //else
+        if(strstr(lines[i], "else") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = elsesym;
+            
+            allTokens[i].lexeme = "else";
+            
+            tokenIndex++;
+        }
+
+        //even
+        if(strstr(lines[i], "even") != NULL) {
+            allTokens[i].lexeme = malloc(sizeof(char)*11);
+            allTokens[i].tokenType = evensym;
+            
+            allTokens[i].lexeme = "even";
             
             tokenIndex++;
         }
     }
     printLexemeTable(allTokens, tokenIndex);
-    printTokenList();   
+    printTokenList(allTokens, tokenIndex);   
 }
-
