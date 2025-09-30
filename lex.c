@@ -1,3 +1,4 @@
+
 /*
 Assignment :
 lex - Lexical Analyzer for PL /0
@@ -75,7 +76,7 @@ evensym = 34,       // even
 typedef struct {
     TokenType tokenType;
     char * lexeme;
-    
+    int startingIndex;
 } Token;
 
 
@@ -141,10 +142,23 @@ int main(int argc, char *argv[]){
     // Adjust as needed
     Token * allTokens = malloc(100*sizeof(Token));
     int tokenIndex = 0;
+    char *resultPtr;
     
-    for(int i = 0; i < index; i++) { 
-        
+    for(int i=0; i < index; i++) { 
+        int startingTokenIndex = tokenIndex;
+        if(strstr(lines[i], "begin") != NULL) {
+            resultPtr = strstr(lines[i], "begin");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+            allTokens[tokenIndex].tokenType = beginsym;
+            
+            allTokens[tokenIndex].lexeme = "begin";
+            
+            tokenIndex++;
+        }
         if(strstr(lines[i], "+") != NULL) {
+            resultPtr = strstr(lines[i], "+");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = plussym;
             
@@ -153,6 +167,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], "-") != NULL) {
+            resultPtr = strstr(lines[i], "-");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = minussym;
             
@@ -161,6 +177,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], "*") != NULL) {
+            resultPtr = strstr(lines[i], "*");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = multsym;
             
@@ -169,6 +187,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], "/") != NULL) {
+            resultPtr = strstr(lines[i], "/");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = slashsym;
             
@@ -176,17 +196,10 @@ int main(int argc, char *argv[]){
             
             tokenIndex++;
         }
-
-        if(strstr(lines[i], "=") != NULL) {
-            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
-            allTokens[tokenIndex].tokenType = eqsym;
-            
-            allTokens[tokenIndex].lexeme = "=";
-            
-            tokenIndex++;
-        }
         
         if(strstr(lines[i], "<>") != NULL) {
+            resultPtr = strstr(lines[i], "<>");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = neqsym;
             
@@ -195,14 +208,21 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], "<") != NULL) {
-            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
-            allTokens[tokenIndex].tokenType = lessym;
-            
-            allTokens[tokenIndex].lexeme = "<";
-            
-            tokenIndex++;
+            resultPtr = strstr(lines[i], "<");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+
+            if(lines[i][resultPtr-lines[i]+1] != '>'){
+                allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+                allTokens[tokenIndex].tokenType = lessym;
+                
+                allTokens[tokenIndex].lexeme = "<";
+                
+                tokenIndex++;
+            }
         }
         if(strstr(lines[i], "<=") != NULL) {
+            resultPtr = strstr(lines[i], "<=");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = leqsym;
             
@@ -211,14 +231,21 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], ">") != NULL) {
-            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
-            allTokens[tokenIndex].tokenType = gtrsym;
-            
-            allTokens[tokenIndex].lexeme = ">";
-            
-            tokenIndex++;
+            resultPtr = strstr(lines[i], ">");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+            if(lines[i][resultPtr-lines[i]-1] != '<'){
+                
+                allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+                allTokens[tokenIndex].tokenType = gtrsym;
+                
+                allTokens[tokenIndex].lexeme = ">";
+                
+                tokenIndex++;
+            }
         }
         if(strstr(lines[i], ">=") != NULL) {
+            resultPtr = strstr(lines[i], ">=");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = geqsym;
             
@@ -227,6 +254,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], "(") != NULL) {
+            resultPtr = strstr(lines[i], "(");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = lparentsym;
             
@@ -235,6 +264,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], ")") != NULL) {
+            resultPtr = strstr(lines[i], ")");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = rparentsym;
             
@@ -243,6 +274,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], ",") != NULL) {
+            resultPtr = strstr(lines[i], ",");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = commasym;
             
@@ -251,6 +284,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], ";") != NULL) {
+            resultPtr = strstr(lines[i], ";");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = semicolonsym;
             
@@ -259,6 +294,8 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
         if(strstr(lines[i], ".") != NULL) {
+            resultPtr = strstr(lines[i], ".");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = periodsym;
             
@@ -269,6 +306,8 @@ int main(int argc, char *argv[]){
 
         //becomes (:=)
         if(strstr(lines[i], ":=") != NULL ) {
+            resultPtr = strstr(lines[i], ":=");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = becomessym;
             
@@ -277,20 +316,24 @@ int main(int argc, char *argv[]){
             tokenIndex++;
         }
 
-        //begin
-        if(strstr(lines[i], "begin") != NULL) {
-
-            allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
-            allTokens[tokenIndex].lexeme = "begin";
-
-            allTokens[tokenIndex].tokenType = beginsym;
+        if(strstr(lines[i], "=") != NULL) {
+            resultPtr = strstr(lines[i], "=");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+            if (lines[i][resultPtr-lines[i]-1] != ':' && lines[i][resultPtr-lines[i]-1] != '>' && lines[i][resultPtr-lines[i]-1] != '<') {
+                allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
+                allTokens[tokenIndex].tokenType = eqsym;
             
-            tokenIndex++;
+                allTokens[tokenIndex].lexeme = "=";
+            
+                tokenIndex++;
+            }
         }
 
         
         //end
         if(strstr(lines[i], "end") != NULL) {
+            resultPtr = strstr(lines[i], "end");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = endsym;
             
@@ -301,6 +344,8 @@ int main(int argc, char *argv[]){
 
         //if
         if(strstr(lines[i], "if") != NULL) {
+            resultPtr = strstr(lines[i], "if");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = ifsym;
             
@@ -311,6 +356,9 @@ int main(int argc, char *argv[]){
 
         //fi
         if(strstr(lines[i], "fi") != NULL) {
+            resultPtr = strstr(lines[i], "fi");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = fisym;
             
@@ -321,6 +369,9 @@ int main(int argc, char *argv[]){
 
         //then
         if(strstr(lines[i], "then") != NULL) {
+            resultPtr = strstr(lines[i], "then");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = thensym;
             
@@ -331,6 +382,8 @@ int main(int argc, char *argv[]){
 
         //while
         if(strstr(lines[i], "while") != NULL) {
+            resultPtr = strstr(lines[i], "while");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = whilesym;
             
@@ -341,6 +394,9 @@ int main(int argc, char *argv[]){
 
         //do
         if(strstr(lines[i], "do") != NULL) {
+            resultPtr = strstr(lines[i], "do");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
+
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = dosym;
             
@@ -351,6 +407,8 @@ int main(int argc, char *argv[]){
 
         //call
         if(strstr(lines[i], "call") != NULL) {
+            resultPtr = strstr(lines[i], "call");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = callsym;
             
@@ -361,6 +419,8 @@ int main(int argc, char *argv[]){
 
         //const
         if(strstr(lines[i], "const") != NULL) {
+            resultPtr = strstr(lines[i], "const");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = constsym;
             
@@ -371,6 +431,8 @@ int main(int argc, char *argv[]){
 
         //var
         if(strstr(lines[i], "var") != NULL) {
+            resultPtr = strstr(lines[i], "var");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = varsym;
             
@@ -381,6 +443,8 @@ int main(int argc, char *argv[]){
 
         //procedure
         if(strstr(lines[i], "procedure") != NULL) {
+            resultPtr = strstr(lines[i], "procedure");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = procsym;
             
@@ -391,6 +455,8 @@ int main(int argc, char *argv[]){
 
         //write
         if(strstr(lines[i], "write") != NULL) {
+            resultPtr = strstr(lines[i], "write");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = writesym;
             
@@ -401,6 +467,8 @@ int main(int argc, char *argv[]){
 
         //read
         if(strstr(lines[i], "read") != NULL) {
+            resultPtr = strstr(lines[i], "read");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = readsym;
             
@@ -411,6 +479,8 @@ int main(int argc, char *argv[]){
 
         //else
         if(strstr(lines[i], "else") != NULL) {
+            resultPtr = strstr(lines[i], "else");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = elsesym;
             
@@ -421,6 +491,8 @@ int main(int argc, char *argv[]){
 
         //even
         if(strstr(lines[i], "even") != NULL) {
+            resultPtr = strstr(lines[i], "even");
+            allTokens[tokenIndex].startingIndex = resultPtr - lines[i];
             allTokens[tokenIndex].lexeme = malloc(sizeof(char)*11);
             allTokens[tokenIndex].tokenType = evensym;
             
@@ -428,8 +500,32 @@ int main(int argc, char *argv[]){
             
             tokenIndex++;
         }
-    }
 
+        for (int j = startingTokenIndex; j < tokenIndex - 1; j++) {
+            int swapped = 0;
+            for (int k = 0; k < tokenIndex - j - 1; k++) {
+                if(allTokens[k].startingIndex > allTokens[k + 1].startingIndex) {
+                    int swapped = 1; 
+                    Token temp;
+                    temp.startingIndex = allTokens[k].startingIndex;
+                    temp.lexeme = allTokens[k].lexeme;
+                    temp.tokenType = allTokens[k].tokenType;
+                    allTokens[k].startingIndex = allTokens[k+1].startingIndex;
+                    allTokens[k].lexeme = allTokens[k+1].lexeme;
+                    allTokens[k].tokenType = allTokens[k+1].tokenType;
+                    allTokens[k+1].startingIndex = temp.startingIndex;
+                    allTokens[k+1].lexeme = temp.lexeme;
+                    allTokens[k+1].tokenType = temp.tokenType;
+                }            
+            if (swapped == 0) {
+                break;
+            }
+            }
+            /* TO DO SWAP FUNCTION*/
+            // if startingIndex > then one after swap
+            printf("%d %d\n", i, allTokens[j].startingIndex);
+        }
+    }
     printLexemeTable(allTokens, tokenIndex);
     printTokenList(allTokens, tokenIndex);   
       
