@@ -110,7 +110,7 @@ void printTokenList(Token * allTokens, int size){
 
 int main(int argc, char *argv[]){
 
-    if(argc != 1){
+    if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
@@ -464,9 +464,12 @@ int main(int argc, char *argv[]){
         }
 
         for (int j = startingTokenIndex; j < tokenIndex - 1; j++) {
+            //printf("\n%d %d\n", j, tokenIndex-j-1);
             int swapped = 0;
-            for (int k = 0; k < tokenIndex - j - 1; k++) {
+            for (int k = startingTokenIndex; k < tokenIndex - j - 1; k++) {
+                printf("\n%d %d", allTokens[k].startingIndex, allTokens[k+1].startingIndex);
                 if(allTokens[k].startingIndex > allTokens[k + 1].startingIndex) {
+                    printf("here");
                     int swapped = 1; 
                     Token temp;
                     temp.startingIndex = allTokens[k].startingIndex;
@@ -478,14 +481,14 @@ int main(int argc, char *argv[]){
                     allTokens[k+1].startingIndex = temp.startingIndex;
                     allTokens[k+1].lexeme = temp.lexeme;
                     allTokens[k+1].tokenType = temp.tokenType;
+                    printf("%s", allTokens[k].lexeme);
+                    printf("%s", allTokens[k+1].lexeme);
                 }            
             if (swapped == 0) {
                 break;
             }
             }
-            /* TO DO SWAP FUNCTION*/
-            // if startingIndex > then one after swap
-            printf("%d %d\n", i, allTokens[j].startingIndex);
+            //printf("%d %d\n", i, allTokens[j].startingIndex);
         }
     }
     printLexemeTable(allTokens, tokenIndex);
