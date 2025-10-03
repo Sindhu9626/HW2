@@ -442,7 +442,6 @@ int main(int argc, char *argv[]){
             }
 
             else if(lines[i]== ':' && lines[i+1] ==  '='){
-                i++;
                 tokenList[tokenIndex].tokenType = becomessym;
                 tokenList[tokenIndex].lexeme = ":=";
                 tokenIndex++;
