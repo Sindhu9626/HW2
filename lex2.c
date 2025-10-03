@@ -285,7 +285,7 @@ int main(int argc, char *argv[]){
             }
             else{
                 // check if it's too long once we've determined its an identifier
-                if (sIndex >= MAXID) {
+                if (sIndex > MAXID) {
                     tokenList[tokenIndex].tokenType = skipsym;
                     tokenList[tokenIndex].lexeme = strdup(check);
                     tokenIndex++;
@@ -302,6 +302,7 @@ int main(int argc, char *argv[]){
             int dIndex = 0;
             char dcheck[200];
 
+
             while(i < index && isdigit(lines[i])){
                 dcheck[dIndex] = lines[i];
                 dIndex++;
@@ -309,17 +310,20 @@ int main(int argc, char *argv[]){
                 
             }
 
-
-            if(dIndex >= MAXNUM){
+            // Check for number too long error
+            if(dIndex > MAXNUM){
+                // Assign error lexeme and token type
                 tokenList[tokenIndex].tokenType = skipsym;
                 tokenList[tokenIndex].lexeme = strdup(dcheck);
                 tokenIndex++;
             }else{
+                // Assign number lexeme and token type
                 dcheck[dIndex] = '\0';
                 tokenList[tokenIndex].tokenType = numbersym;
                 tokenList[tokenIndex].lexeme = strdup(dcheck);
                 tokenIndex++;
             }
+            // Correct i to end of number
             i--;
             
         }
@@ -328,10 +332,11 @@ int main(int argc, char *argv[]){
             
             char currentChar [1];
             currentChar[0] = lines[i];
-            
+            // Check for known special symbols and assign correct token type and lexeme
             if(lines[i] == '+'){
                 tokenList[tokenIndex].tokenType = plussym;
                 tokenList[tokenIndex].lexeme = "+";
+                // Increase token index to take next token
                 tokenIndex++;
 
             }
@@ -351,21 +356,26 @@ int main(int argc, char *argv[]){
             }
         
             else if(lines[i] == '/'){
+                // Check for comments symbol
                 if(lines[i+1] == '*'){
+                    // increase i to skip over * symbol
                     i += 2;
                     while(lines[i] != '*' && lines[i+1] != '/'){
-                        i++;
+                        // skip over all information in between /* and */
+                        i++; 
                     }
+                    // make i end at / symbol so it will start at the next character when loop increments i
                     i++;
-                    continue;
                 }
                 else{
+                    // Otherwise, assign info for slash symbol
                     tokenList[tokenIndex].tokenType = slashsym;
                     tokenList[tokenIndex].lexeme = "/";
                     tokenIndex++;
                 }
             }
 
+            // Check if equal sign symbol is not a part of := symbol
             else if(lines[i] == '=' && lines[i-1] != ':'){
                 tokenList[tokenIndex].tokenType = eqsym;
                 tokenList[tokenIndex].lexeme = "=";
@@ -373,9 +383,9 @@ int main(int argc, char *argv[]){
 
             }
 
-
+            
             else if(lines[i] == '<'){
-
+            // Check for potential multi-character symbols starting with <
                 if(lines[i+1] ==  '>'){
                     tokenList[tokenIndex].tokenType = neqsym;
                     tokenList[tokenIndex].lexeme = "<>";
@@ -395,6 +405,7 @@ int main(int argc, char *argv[]){
             }
 
             else if(lines[i]== '>'){
+                // Check for potential multi-character symbols starting with >
                 if(lines[i+1] ==  '='){
                     tokenList[tokenIndex].tokenType = geqsym;
                     tokenList[tokenIndex].lexeme = ">=";
@@ -440,7 +451,7 @@ int main(int argc, char *argv[]){
                 tokenIndex++;
 
             }
-
+            // Check if := symbol
             else if(lines[i]== ':' && lines[i+1] ==  '='){
                 tokenList[tokenIndex].tokenType = becomessym;
                 tokenList[tokenIndex].lexeme = ":=";
@@ -450,7 +461,7 @@ int main(int argc, char *argv[]){
             }
             // checking for  invisible symbols so they aren't registered as invalid characters
             else if (!(lines[i] == ' ' || lines[i] == '\n' || lines[i] == '\t' || lines[i] == '\r')) {
-                // Not a known symbol
+                // Assign any remaining token as invalid
                 tokenList[tokenIndex].tokenType = skipsym;
                 tokenList[tokenIndex].lexeme = strdup(currentChar);
                 printf("\n%c \n", lines[i]);
@@ -460,7 +471,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-
+    // print lexeme table and token list
     printLexemeTable(tokenList, tokenIndex);
 
     printTokenList(tokenList, tokenIndex);   
