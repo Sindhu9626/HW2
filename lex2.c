@@ -1,4 +1,5 @@
 
+
 /*
 Assignment :
 lex - Lexical Analyzer for PL /0
@@ -94,9 +95,17 @@ void printLexemeTable(Token * allTokens, int size){
     printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
     for (int i = 0; i < size; i++) {
+        /*TO DO check if number or letter or neither*/
         if(allTokens[i].tokenType == 1) {
-            //TO DO: add check of whether error is IDentifier or Number
-            printf("\n%s\tNumber too long", allTokens[i].lexeme);
+            if(isalpha(allTokens[i].lexeme[0])) {
+                printf("\n%s\tIdentifier too long", allTokens[i].lexeme);
+            }
+            else if (isdigit(allTokens[i].lexeme[0])) {
+                printf("\n%s\tNumber too long", allTokens[i].lexeme); 
+            }
+            else {
+                printf("\n%s\tInvalid token", allTokens[i].lexeme); 
+            }
             continue;
         }
         printf("\n%s\t%d", allTokens[i].lexeme, allTokens[i].tokenType);
@@ -121,25 +130,27 @@ void printTokenList(Token * allTokens, int size){
 int main(int argc, char *argv[]){
 
     
-    if(argc != 1){
+    if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
+    /*TO DO change to stdin*/
+    
+    //FILE *inputFile = fopen("input.txt", "r");
 
-    //TO DO: change file handling
-    FILE *inputFile = fopen("input.txt", "r");
-
+    /*
     if (inputFile == NULL) {
         printf("Error opening file.\n");
         return 1;
     }
+    */
     
     char *lines = (char*) malloc(sizeof(char)*500);
     
 
     int ch; 
     int index = 0;
-    while ((ch = fgetc(inputFile)) != EOF) {
+    while ((ch = fgetc(stdin)) != EOF) {
         lines[index] = (char)ch;
         index++;
     }
@@ -160,18 +171,15 @@ int main(int argc, char *argv[]){
             int sIndex = 0;
             char check[200];
 
-            while(i < index && isalpha(lines[i])){
+            // check if it is still a letter or number, since identifiers can include numbers
+            // Is this the correct formatting?
+            while(i < index && isalpha(lines[i]) || i < index && isdigit(lines[i])){
                 check[sIndex] = lines[i];
                 sIndex++;
                 i++;
                 
             }
-
-            if(sIndex >= MAXID){
-                tokenList[tokenIndex].tokenType = skipsym;
-                tokenList[tokenIndex].lexeme = strdup(check);
-                tokenIndex++;
-            }
+            // What does this do?
             check[sIndex] = '\0';
 
             if(strcmp(check, "begin") == 0){
@@ -277,9 +285,17 @@ int main(int argc, char *argv[]){
 
             }
             else{
-                tokenList[tokenIndex].tokenType = identsym;
-                tokenList[tokenIndex].lexeme = strdup(check);
-                tokenIndex++;
+                // check if it's too long once we've determined its an identifier
+                if (sIndex >= MAXID) {
+                    tokenList[tokenIndex].tokenType = skipsym;
+                    tokenList[tokenIndex].lexeme = strdup(check);
+                    tokenIndex++;
+                }
+                else {
+                    tokenList[tokenIndex].tokenType = identsym;
+                    tokenList[tokenIndex].lexeme = strdup(check);
+                    tokenIndex++;
+                }
             }
         }
         //NUMBER TOKEN
@@ -313,6 +329,7 @@ int main(int argc, char *argv[]){
 
             //TO DO: check if two character special symbols work
             //TO DO: add check for symbol that doesn't exist
+            //printf("%c", lines[i]);
 
             
             if(lines[i] == '+'){
@@ -329,13 +346,13 @@ int main(int argc, char *argv[]){
 
             }
 
-            else if(lines[i]== '*'){
+            else if(lines[i] == '*'){
                 tokenList[tokenIndex].tokenType = multsym;
                 tokenList[tokenIndex].lexeme = "*";
                 tokenIndex++;
 
             }
-
+        
             else if(lines[i] == '/'){
                 if(lines[i+1] == '*'){
                     i += 2;
@@ -431,7 +448,16 @@ int main(int argc, char *argv[]){
                 tokenList[tokenIndex].tokenType = becomessym;
                 tokenList[tokenIndex].lexeme = ":=";
                 tokenIndex++;
+                i++;
 
+            }
+            // skipping over multicharacter invisible characters
+            // checking for remaining invisible symbols so they aren't registered as invalid characters
+            else if ( !(lines[i] == ' '  || lines[i] == '\n' || lines[i] == '\t'|| lines[i] == '\r')) {
+                // Not a known symbol
+                tokenList[tokenIndex].tokenType = skipsym;
+                tokenList[tokenIndex].lexeme = " ";
+                tokenIndex++;
             }
 
         }
