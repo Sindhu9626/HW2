@@ -82,73 +82,102 @@ typedef struct {
 } Token;
 
 
-// PRINT FUNCTIONS
+//PRINT FUNCTIONS
 
 void printSourceProgram(char *input, int size){
+
     printf("\nSource Program:\n\n");
+
     for(int i = 0; i < size; i++) {
+
         printf("%c", input[i]);
+
     }
+
 }
 
 void printLexemeTable(Token * allTokens, int size){
+
     printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
+
     for (int i = 0; i < size; i++) {
+        
+        //Error Handling
         if(allTokens[i].tokenType == 1) {
+
+            //Identifier Error
             if(isalpha(allTokens[i].lexeme[0])) {
                 printf("\n%s\tIdentifier too long", allTokens[i].lexeme);
             }
+
+            //Number error
             else if (isdigit(allTokens[i].lexeme[0])) {
                 printf("\n%s\tNumber too long", allTokens[i].lexeme); 
             }
+
+            //Invalid Token Error
             else {
+                
                 printf("\n%c\tInvalid token", allTokens[i].lexeme[0]); 
             }
+
             continue;
+
         }
+
         printf("\n%s\t%d", allTokens[i].lexeme, allTokens[i].tokenType);
+
     }
 
 }
 
 void printTokenList(Token * allTokens, int size){
+
     printf("\n\nToken List:\n\n");
+
     for(int i = 0; i < size; i++) {
+
         printf("%d ", allTokens[i].tokenType);
+        
+        //Printing Identifiers and Numbers
         if(allTokens[i].tokenType == 2) {
+
             printf("%s ", allTokens[i].lexeme);
+
         }
         else if(allTokens[i].tokenType == 3) {
+
             printf("%s ", allTokens[i].lexeme);
+
         }
+
     }
     
 }
 
 int main(int argc, char *argv[]){
 
-    
+    //Argument count check and reading file input
     if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
 
-    //TO DO: change file handling
     FILE *inputFile = fopen(argv[1], "r");
 
-    
     if (inputFile == NULL) {
         printf("Error opening file.\n");
         return 1;
     }
     
-    
+    //Reading all of file into char point
+
     char *lines = (char*) malloc(sizeof(char)*500);
     
-
     int ch; 
     int index = 0;
+
     while ((ch = fgetc(inputFile)) != EOF) {
         lines[index] = (char)ch;
         index++;
@@ -156,12 +185,12 @@ int main(int argc, char *argv[]){
 
     lines[index] = '\0';
 
+    //Print source program
     printSourceProgram(lines, index);
 
+    //initalizing token list and adding tokens into it
     Token *tokenList = malloc(100*sizeof(Token));
     int tokenIndex = 0;
-
-    //TO DO: check if sizing of arrays is okay
 
     for(int i = 0; i < index; i++){
         
@@ -170,17 +199,17 @@ int main(int argc, char *argv[]){
             int sIndex = 0;
             char check[200];
 
-            // check if it is still a letter or number, since identifiers can include numbers
-            // Is this the correct formatting?
+            //taking in reserved word or identifier into char array 
             while(i < index && isalpha(lines[i]) || i < index && isdigit(lines[i])){
                 check[sIndex] = lines[i];
                 sIndex++;
                 i++;
                 
             }
-            // What does this do?
+            
             check[sIndex] = '\0';
 
+            //Reserved words
             if(strcmp(check, "begin") == 0){
                 tokenList[tokenIndex].tokenType = beginsym;
                 tokenList[tokenIndex].lexeme = "begin";
@@ -284,12 +313,13 @@ int main(int argc, char *argv[]){
 
             }
             else{
-                // check if it's too long once we've determined its an identifier
+                //Identifier length error check
                 if (sIndex > MAXID) {
                     tokenList[tokenIndex].tokenType = skipsym;
                     tokenList[tokenIndex].lexeme = strdup(check);
                     tokenIndex++;
                 }
+                //Adding identifier
                 else {
                     tokenList[tokenIndex].tokenType = identsym;
                     tokenList[tokenIndex].lexeme = strdup(check);
