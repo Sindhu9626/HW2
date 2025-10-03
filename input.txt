@@ -1,5 +1,15 @@
-var x , y ;
 begin
-y := 3;
-x := y + 56;
-end .
+x := 1234;
+end . ~
++ - * / =
+<> < <= > >= a+b ( ) = := , . if else while
+fi then do call const var
+procedure
+write
+read 
+else
+even
+
+123456 
+/*HELL YEAH*//
+SUPERCALIFRAGILISTICEXPIALIDOCIOUS
