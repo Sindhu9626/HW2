@@ -103,7 +103,7 @@ void printLexemeTable(Token * allTokens, int size){
                 printf("\n%s\tNumber too long", allTokens[i].lexeme); 
             }
             else {
-                printf("\n%s\tInvalid token", allTokens[i].lexeme); 
+                printf("\n%c\tInvalid token", allTokens[i].lexeme[0]); 
             }
             continue;
         }
@@ -129,7 +129,7 @@ void printTokenList(Token * allTokens, int size){
 int main(int argc, char *argv[]){
 
     
-    if(argc != 1){
+    if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
@@ -323,11 +323,9 @@ int main(int argc, char *argv[]){
         }
         //SPECIAl SYMBOLS
         else{
-
-            //TO DO: check if two character special symbols work
-            //TO DO: add check for symbol that doesn't exist
-            //printf("%c", lines[i]);
-
+            
+            char currentChar [1];
+            currentChar[0] = lines[i];
             
             if(lines[i] == '+'){
                 tokenList[tokenIndex].tokenType = plussym;
@@ -442,28 +440,24 @@ int main(int argc, char *argv[]){
             }
 
             else if(lines[i]== ':' && lines[i+1] ==  '='){
+                i++;
                 tokenList[tokenIndex].tokenType = becomessym;
                 tokenList[tokenIndex].lexeme = ":=";
                 tokenIndex++;
 
             }
-            // skipping over multicharacter invisible characters
-            else if ((lines[i] == '\\' && lines[i+1] == 'n') || (lines[i] == '\\' && lines[i+1] == 't') || (lines[i] == '\\' && lines[i+1] == 'r')) {
-                i++;
-            }
-            // checking for remaining invisible symbols so they aren't registered as invalid characters
-            else if (!(lines[i] == ' ')) {
+            // checking for  invisible symbols so they aren't registered as invalid characters
+            else if (!(lines[i] == ' ' || lines[i] == '\n' || lines[i] == '\t' || lines[i] == '\r')) {
                 // Not a known symbol
                 tokenList[tokenIndex].tokenType = skipsym;
-                tokenList[tokenIndex].lexeme = " ";
+                tokenList[tokenIndex].lexeme = strdup(currentChar);
+                printf("\n%c \n", lines[i]);
                 tokenIndex++;
             }
 
         }
     }
 
-
-    //TO DO:check if output is correct for all inputs
 
     printLexemeTable(tokenList, tokenIndex);
 
