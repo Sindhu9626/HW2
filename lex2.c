@@ -94,8 +94,17 @@ void printLexemeTable(Token * allTokens, int size){
     printf("\n\nLexeme Table:\n\n");
     printf("lexeme\ttoken type");
     for (int i = 0; i < size; i++) {
+        /*TO DO check if number or letter or neither*/
         if(allTokens[i].tokenType == 1) {
-            printf("\n%s\tNumber too long", allTokens[i].lexeme);
+            if(isalpha(allTokens[i].lexeme[0])) {
+                printf("\n%s\tIdentifier too long", allTokens[i].lexeme);
+            }
+            else if (isdigit(allTokens[i].lexeme[0])) {
+                printf("\n%s\tNumber too long", allTokens[i].lexeme); 
+            }
+            else {
+                printf("\n%s\tInvalid token", allTokens[i].lexeme); 
+            }
             continue;
         }
         printf("\n%s\t%d", allTokens[i].lexeme, allTokens[i].tokenType);
@@ -123,6 +132,7 @@ int main(int argc, char *argv[]){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
+    /*TO DO change to stdin*/
     
     FILE *inputFile = fopen("input.txt", "r");
 
@@ -160,18 +170,15 @@ int main(int argc, char *argv[]){
             int sIndex = 0;
             char check[200];
 
-            while(i < index && isalpha(lines[i])){
+            // check if it is still a letter or number, since identifiers can include numbers
+            // Is this the correct formatting?
+            while(i < index && isalpha(lines[i]) || i < index && isdigit(lines[i])){
                 check[sIndex] = lines[i];
                 sIndex++;
                 i++;
                 
             }
-
-            if(sIndex >= MAXID){
-                tokenList[tokenIndex].tokenType = skipsym;
-                tokenList[tokenIndex].lexeme = strdup(check);
-                tokenIndex++;
-            }
+            // What does this do?
             check[sIndex] = '\0';
 
             if(strcmp(check, "begin") == 0){
@@ -277,9 +284,17 @@ int main(int argc, char *argv[]){
 
             }
             else{
-                tokenList[tokenIndex].tokenType = identsym;
-                tokenList[tokenIndex].lexeme = strdup(check);
-                tokenIndex++;
+                // check if it's too long once we've determined its an identifier
+                if (sIndex >= MAXID) {
+                    tokenList[tokenIndex].tokenType = skipsym;
+                    tokenList[tokenIndex].lexeme = strdup(check);
+                    tokenIndex++;
+                }
+                else {
+                    tokenList[tokenIndex].tokenType = identsym;
+                    tokenList[tokenIndex].lexeme = strdup(check);
+                    tokenIndex++;
+                }
             }
         }
         //NUMBER TOKEN
@@ -310,7 +325,6 @@ int main(int argc, char *argv[]){
         }
         //SPECIAl SYMBOLS
         else{
-
             //printf("%c", lines[i]);
 
             
@@ -334,7 +348,7 @@ int main(int argc, char *argv[]){
                 tokenIndex++;
 
             }
-
+        
             else if(lines[i] == '/'){
                 if(lines[i+1] == '*'){
                     i += 2;
@@ -431,6 +445,17 @@ int main(int argc, char *argv[]){
                 tokenList[tokenIndex].lexeme = ":=";
                 tokenIndex++;
 
+            }
+            // skipping over multicharacter invisible characters
+            else if ((lines[i] == '\\' && lines[i+1] == 'n') || (lines[i] == '\\' && lines[i+1] == 't') || (lines[i] == '\\' && lines[i+1] == 'r')) {
+                i++;
+            }
+            // checking for remaining invisible symbols so they aren't registered as invalid characters
+            else if (!(lines[i] == ' ')) {
+                // Not a known symbol
+                tokenList[tokenIndex].tokenType = skipsym;
+                tokenList[tokenIndex].lexeme = " ";
+                tokenIndex++;
             }
 
         }
