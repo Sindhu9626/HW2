@@ -1,4 +1,5 @@
 
+
 /*
 Assignment :
 lex - Lexical Analyzer for PL /0
@@ -95,6 +96,7 @@ void printLexemeTable(Token * allTokens, int size){
     printf("lexeme\ttoken type");
     for (int i = 0; i < size; i++) {
         /*TO DO check if number or letter or neither*/
+        /*TO DO check if number or letter or neither*/
         if(allTokens[i].tokenType == 1) {
             if(isalpha(allTokens[i].lexeme[0])) {
                 printf("\n%s\tIdentifier too long", allTokens[i].lexeme);
@@ -105,6 +107,8 @@ void printLexemeTable(Token * allTokens, int size){
             else {
                 printf("\n%c\tInvalid token", allTokens[i].lexeme[0]); 
             }
+            //TO DO: add check of whether error is IDentifier or Number
+            printf("\n%s\tNumber too long", allTokens[i].lexeme);
             continue;
         }
         printf("\n%s\t%d", allTokens[i].lexeme, allTokens[i].tokenType);
@@ -130,24 +134,27 @@ int main(int argc, char *argv[]){
 
     
     if(argc != 2){
+    if(argc != 2){
         printf("Error! Wrong number of arguments.\n");
         return 1;
     } 
-    /*TO DO change to stdin*/
-    
+
+    //TO DO: change file handling
     FILE *inputFile = fopen("input.txt", "r");
 
+    /*
     if (inputFile == NULL) {
         printf("Error opening file.\n");
         return 1;
     }
+    */
     
     char *lines = (char*) malloc(sizeof(char)*500);
     
 
     int ch; 
     int index = 0;
-    while ((ch = fgetc(inputFile)) != EOF) {
+    while ((ch = fgetc(stdin)) != EOF) {
         lines[index] = (char)ch;
         index++;
     }
@@ -341,7 +348,7 @@ int main(int argc, char *argv[]){
 
             }
 
-            else if(lines[i]== '*'){
+            else if(lines[i] == '*'){
                 tokenList[tokenIndex].tokenType = multsym;
                 tokenList[tokenIndex].lexeme = "*";
                 tokenIndex++;
@@ -444,7 +451,16 @@ int main(int argc, char *argv[]){
                 tokenList[tokenIndex].tokenType = becomessym;
                 tokenList[tokenIndex].lexeme = ":=";
                 tokenIndex++;
+                i++;
 
+            }
+            // skipping over multicharacter invisible characters
+            // checking for remaining invisible symbols so they aren't registered as invalid characters
+            else if ( !(lines[i] == ' '  || lines[i] == '\n' || lines[i] == '\t'|| lines[i] == '\r')) {
+                // Not a known symbol
+                tokenList[tokenIndex].tokenType = skipsym;
+                tokenList[tokenIndex].lexeme = " ";
+                tokenIndex++;
             }
             // checking for  invisible symbols so they aren't registered as invalid characters
             else if (!(lines[i] == ' ' || lines[i] == '\n' || lines[i] == '\t' || lines[i] == '\r')) {
