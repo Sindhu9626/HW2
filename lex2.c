@@ -128,6 +128,7 @@ void printTokenList(Token * allTokens, int size){
 
 int main(int argc, char *argv[]){
 
+    
     if(argc != 1){
         printf("Error! Wrong number of arguments.\n");
         return 1;
@@ -155,13 +156,10 @@ int main(int argc, char *argv[]){
 
     printSourceProgram(lines, index);
 
-    /*
-    for(int i = 0; i< index;i++){
-        printf("%c", lines[i]);
-    }*/
-
     Token *tokenList = malloc(100*sizeof(Token));
     int tokenIndex = 0;
+
+    //TO DO: check if sizing of arrays is okay
 
     for(int i = 0; i < index; i++){
         
@@ -325,6 +323,9 @@ int main(int argc, char *argv[]){
         }
         //SPECIAl SYMBOLS
         else{
+
+            //TO DO: check if two character special symbols work
+            //TO DO: add check for symbol that doesn't exist
             //printf("%c", lines[i]);
 
             
@@ -462,9 +463,10 @@ int main(int argc, char *argv[]){
     }
 
 
+    //TO DO:check if output is correct for all inputs
 
     printLexemeTable(tokenList, tokenIndex);
-    
+
     printTokenList(tokenList, tokenIndex);   
       
 }
