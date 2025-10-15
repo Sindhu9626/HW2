@@ -81,6 +81,15 @@ typedef struct {
     int startingIndex;
 } Token;
 
+// String Duplicate function 
+char *stringDupe(const char *s) {
+    size_t size = strlen(s) + 1;
+    char *p = malloc(size);
+    if (p) {
+        memcpy(p, s, size);
+    }
+    return p;
+}
 
 //PRINT FUNCTIONS
 
@@ -317,13 +326,13 @@ int main(int argc, char *argv[]){
                 //Identifier length error check
                 if (sIndex > MAXID) {
                     tokenList[tokenIndex].tokenType = skipsym;
-                    tokenList[tokenIndex].lexeme = strdup(check);
+                    tokenList[tokenIndex].lexeme = stringDupe(check);
                     tokenIndex++;
                 }
                 //Adding identifier
                 else {
                     tokenList[tokenIndex].tokenType = identsym;
-                    tokenList[tokenIndex].lexeme = strdup(check);
+                    tokenList[tokenIndex].lexeme = stringDupe(check);
                     tokenIndex++;
                 }
             }
@@ -346,13 +355,13 @@ int main(int argc, char *argv[]){
             if(dIndex > MAXNUM){
                 // Assign error lexeme and token type
                 tokenList[tokenIndex].tokenType = skipsym;
-                tokenList[tokenIndex].lexeme = strdup(dcheck);
+                tokenList[tokenIndex].lexeme = stringDupe(dcheck);
                 tokenIndex++;
             }else{
                 // Assign number lexeme and token type
                 dcheck[dIndex] = '\0';
                 tokenList[tokenIndex].tokenType = numbersym;
-                tokenList[tokenIndex].lexeme = strdup(dcheck);
+                tokenList[tokenIndex].lexeme = stringDupe(dcheck);
                 tokenIndex++;
             }
             // Correct i to end of number
@@ -495,7 +504,7 @@ int main(int argc, char *argv[]){
             else if (!(lines[i] == ' ' || lines[i] == '\n' || lines[i] == '\t' || lines[i] == '\r')) {
                 // Assign any remaining token as invalid
                 tokenList[tokenIndex].tokenType = skipsym;
-                tokenList[tokenIndex].lexeme = strdup(currentChar);
+                tokenList[tokenIndex].lexeme = stringDupe(currentChar);
                 tokenIndex++;
             }
 
