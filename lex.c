@@ -216,6 +216,8 @@ int main(int argc, char *argv[]){
                 i++;
                 
             }
+            // Correct i to end of identifier
+            i--;
             
             check[sIndex] = '\0';
 
@@ -262,7 +264,7 @@ int main(int argc, char *argv[]){
 
             else if(strcmp(check, "do") == 0){
                 tokenList[tokenIndex].tokenType = dosym;
-                tokenList[tokenIndex].lexeme = "dosym";
+                tokenList[tokenIndex].lexeme = "do";
                 tokenIndex++;
 
             }
@@ -398,15 +400,34 @@ int main(int argc, char *argv[]){
         
             else if(lines[i] == '/'){
                 // Check for comments symbol
+                int k = 0;
                 if(lines[i+1] == '*'){
-                    // increase i to skip over * symbol
-                    i += 2;
-                    while(lines[i] != '*' && lines[i+1] != '/'){
-                        // skip over all information in between /* and */
-                        i++; 
+                    int found = 0;
+                    //Checking for extra  comment delimiters
+                    for (k = i+2; k < index; k++) {
+                         if (lines[k] == '/' && lines[k+1] == '*') {
+                            break;
+                        }
+                        //Checking for end of comment 
+                        if (lines[k] == '*' && lines[k+1] == '/' ) {
+                            found = 1;
+                            break;
+                        }
                     }
-                    // make i end at / symbol so it will start at the next character when loop increments i
-                    i++;
+                    //if comment end found skip over everything in between 
+                    if (found == 1) {
+                        
+                        //setting i to the position after comment
+                        i = k + 2;
+                        
+                    }
+                    else {
+                        // Otherwise, assign info for slash symbol
+                        tokenList[tokenIndex].tokenType = slashsym;
+                        tokenList[tokenIndex].lexeme = "/";
+                        tokenIndex++;
+                    }
+                  
                 }
                 else{
                     // Otherwise, assign info for slash symbol
